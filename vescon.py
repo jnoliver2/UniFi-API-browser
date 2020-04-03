@@ -19,6 +19,10 @@ set firewall modify balance rule 30 action modify
 set firewall modify balance rule 30 description 'do NOT load balance destination public address'
 set firewall modify balance rule 30 destination group address-group ADDRv4_eth1
 set firewall modify balance rule 30 modify table main
+set firewall modify balance rule 40 action modify
+set firewall modify balance rule 40 description 'do NOT load balance destination public address'
+set firewall modify balance rule 40 destination group address-group ADDRv4_eth2
+set firewall modify balance rule 40 modify table main
 set firewall modify balance rule 80 action modify
 set firewall modify balance rule 80 modify lb-group G
 set firewall receive-redirects disable
@@ -33,6 +37,8 @@ set interfaces ethernet eth1 address 192.168.100.5/24
 set interfaces ethernet eth1 description 'WAN 2'
 set interfaces ethernet eth1 duplex auto
 set interfaces ethernet eth1 speed auto
+set interfaces ethernet eth2 address 192.168.1.2/24
+set interfaces ethernet eth2 description 'WAN 3'
 set interfaces ethernet eth2 duplex auto
 set interfaces ethernet eth2 speed auto
 set interfaces ethernet eth3 duplex auto
@@ -46,13 +52,13 @@ set interfaces switch switch0 address 10.0.154.2/24
 set interfaces switch switch0 description Local
 set interfaces switch switch0 firewall in modify balance
 set interfaces switch switch0 mtu 1500
-set interfaces switch switch0 switch-port interface eth2
 set interfaces switch switch0 switch-port interface eth3
 set interfaces switch switch0 switch-port interface eth4
 set interfaces switch switch0 switch-port interface eth5
 set interfaces switch switch0 switch-port vlan-aware disable
 set load-balance group G interface eth0
 set load-balance group G interface eth1 failover-only
+set load-balance group G interface eth2
 set load-balance group G lb-local enable
 set load-balance group G lb-local-metric-change disable
 set port-forward auto-firewall enable
@@ -79,6 +85,7 @@ set port-forward rule 4 forward-to port 443
 set port-forward rule 4 original-port 1000
 set port-forward rule 4 protocol tcp_udp
 set port-forward wan-interface eth0
+set protocols static route 0.0.0.0/0 next-hop 192.168.1.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.100.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.110.1
 set service dns forwarding cache-size 150
@@ -92,17 +99,19 @@ set service nat rule 5000 type masquerade
 set service nat rule 5002 description 'masquerade for WAN 2'
 set service nat rule 5002 outbound-interface eth1
 set service nat rule 5002 type masquerade
+set service nat rule 5004 description 'masquerade for WAN 3'
+set service nat rule 5004 outbound-interface eth2
+set service nat rule 5004 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
-set service unms connection 'wss://10.0.154.3:9443+yxMisWg-cWIrk9SB_1rPBiozUEvqBeuFYrlkRkU0BC0AAAAA+allowUntrustedCertificate'
 set system conntrack expect-table-size 4096
 set system conntrack hash-size 4096
 set system conntrack table-size 32768
 set system conntrack tcp half-open-connections 512
 set system conntrack tcp loose enable
 set system conntrack tcp max-retrans 3
-set system host-name Bamburi-Gateway
-set system login user admin authentication encrypted-password '$6$zLNY.xeWcz1k$Pru2TT57JxwDosyM2RzKDdJSqZzW/nUgkOpgHO5JS66BfLnubjcuiHZi2uraR74YZYMrKaAExSLyE882wBiGZ.'
+set system host-name ubnt
+set system login user admin authentication encrypted-password '$6$dyvXhTwWkFg$NabfWfRohnHU7..1A5Dtq0L5zrgPvKXQ1G4E5VBSwez9amcaGOIxZ3Tp4coh4hhGgBXO28P1UK3jJNj1ojTwX.'
 set system login user admin level admin
 set system name-server 8.8.8.8
 set system ntp server 0.ubnt.pool.ntp.org
@@ -111,3 +120,4 @@ set system ntp server 2.ubnt.pool.ntp.org
 set system ntp server 3.ubnt.pool.ntp.org
 set system syslog global facility all level notice
 set system syslog global facility protocols level debug
+set system time-zone UTC
