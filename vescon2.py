@@ -2,8 +2,10 @@ set interfaces ethernet eth0 duplex auto
 set interfaces ethernet eth0 speed auto
 set interfaces ethernet eth0 vif 181 address 175.175.177.2/24
 set interfaces ethernet eth0 vif 181 description Internet
+set interfaces ethernet eth1 address 192.168.6.4/24
 set interfaces ethernet eth1 description Local
 set interfaces ethernet eth1 duplex auto
+set interfaces ethernet eth1 poe output off
 set interfaces ethernet eth1 speed auto
 set interfaces ethernet eth2 description Local
 set interfaces ethernet eth2 duplex auto
@@ -20,11 +22,13 @@ set interfaces loopback lo
 set interfaces switch switch0 address 10.0.154.2/24
 set interfaces switch switch0 description Local
 set interfaces switch switch0 mtu 1500
-set interfaces switch switch0 switch-port interface eth1
 set interfaces switch switch0 switch-port interface eth2
 set interfaces switch switch0 switch-port interface eth3
 set interfaces switch switch0 switch-port interface eth4
 set interfaces switch switch0 switch-port vlan-aware disable
+set protocols bgp 65530 neighbor 175.175.177.1 remote-as 65530
+set protocols bgp 65530 parameters router-id 175.175.177.2
+set protocols static route 0.0.0.0/0 next-hop 192.168.6.1
 set service dns forwarding cache-size 150
 set service dns forwarding listen-on LISTENONPORT
 set service dns forwarding listen-on switch0
@@ -34,9 +38,13 @@ set service gui older-ciphers enable
 set service nat rule 5010 description 'masquerade for WAN'
 set service nat rule 5010 outbound-interface eth0.181
 set service nat rule 5010 type masquerade
+set service nat rule 5011 description 'masquerade for WAN2'
+set service nat rule 5011 log disable
+set service nat rule 5011 outbound-interface eth1
+set service nat rule 5011 protocol all
+set service nat rule 5011 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
-set system gateway-address 175.175.177.1
 set system host-name ubnt
 set system login user admin authentication encrypted-password '$6$SnYmI.9S$TIAN1RHw65cPzESBGWuSxR6pye30/Ea/DOa4R/U1QCDqEViNj4gc.8LZPB.WgRB0mTuyyay2djXxraiQahKRy1'
 set system login user admin level admin
