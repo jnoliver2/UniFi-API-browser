@@ -1,18 +1,3 @@
-set firewall all-ping enable
-set firewall broadcast-ping disable
-set firewall group address-group GOOGLE description ''
-set firewall group network-group PRIVATE_NETS network 192.168.0.0/16
-set firewall group network-group PRIVATE_NETS network 172.16.0.0/12
-set firewall group network-group PRIVATE_NETS network 10.0.0.0/8
-set firewall ipv6-receive-redirects disable
-set firewall ipv6-src-route disable
-set firewall ip-src-route disable
-set firewall log-martians disable
-set firewall modify balance
-set firewall receive-redirects disable
-set firewall send-redirects enable
-set firewall source-validation disable
-set firewall syn-cookies enable
 set interfaces ethernet eth0 address 192.168.110.2/24
 set interfaces ethernet eth0 description WAN
 set interfaces ethernet eth0 duplex auto
@@ -38,26 +23,9 @@ set interfaces ethernet eth4 speed auto
 set interfaces loopback lo
 set interfaces switch switch0 address 10.0.154.2/24
 set interfaces switch switch0 description Local
-set interfaces switch switch0 firewall in modify balance
 set interfaces switch switch0 mtu 1500
 set interfaces switch switch0 switch-port interface eth4
 set interfaces switch switch0 switch-port vlan-aware disable
-set load-balance group G exclude-local-dns disable
-set load-balance group G flush-on-active enable
-set load-balance group G gateway-update-interval 20
-set load-balance group G interface eth0
-set load-balance group G interface eth1 failover-only
-set load-balance group G interface eth2
-set load-balance group G interface eth3
-set load-balance group G lb-local enable
-set load-balance group G lb-local-metric-change disable
-set load-balance group GOOGLE exclude-local-dns disable
-set load-balance group GOOGLE flush-on-active enable
-set load-balance group GOOGLE gateway-update-interval 20
-set load-balance group GOOGLE interface eth1
-set load-balance group GOOGLE interface eth3 failover-only
-set load-balance group GOOGLE lb-local enable
-set load-balance group GOOGLE lb-local-metric-change disable
 set policy prefix-list PREFIX-FILTER rule 10 action deny
 set policy prefix-list PREFIX-FILTER rule 10 le 32
 set policy prefix-list PREFIX-FILTER rule 10 prefix 62.8.0.0/16
@@ -96,8 +64,7 @@ set service nat rule 5007 protocol all
 set service nat rule 5007 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
-set service unms connection 'wss://10.0.154.3:9443+9exGQ9uBNb03M4Iqwh7AW9852kdaXRVZMFO1eGH_i7wAAAAA+allowSelfSignedCertificate'
-set service unms disable
+set service unms connection 'wss://10.0.154.3:9443+y4czFeLOKiyPVor33A4yxrO6mlEWzEl1eMvVAgRGX6wAAAAA+allowUntrustedCertificate'
 set system conntrack expect-table-size 4096
 set system conntrack hash-size 4096
 set system conntrack table-size 32768
