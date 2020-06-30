@@ -1,57 +1,8 @@
 set firewall all-ping enable
 set firewall broadcast-ping disable
-
-
-
-
-set firewall group address-group ME address 10.0.154.80
-set firewall group address-group ME address 10.0.154.157
-set firewall group address-group ME address 10.0.154.138
-set firewall group address-group ME address 10.0.154.145
-set firewall group address-group ME address 10.0.154.89
-
-set firewall group address-group Spammers_25 address 192.168.100.11
-set firewall group address-group Spammers_25 address 10.0.154.55
-set firewall group address-group Spammers_25 address 10.0.154.133
-set firewall group address-group Spammers_25 address 10.0.154.53
-set firewall group address-group Spammers_25 address 10.0.154.143
-set firewall group address-group Spammers_25 address 10.0.154.123
-set firewall group address-group Spammers_25 address 10.0.154.64
-set firewall group address-group Spammers_25 address 10.0.154.71
-set firewall group address-group Spammers_25 description ''
-
-set firewall group address-group block_torrents address 10.0.154.166
-set firewall group address-group block_torrents address 10.0.154.102
-set firewall group address-group block_torrents address 10.0.154.168
-set firewall group address-group block_torrents address 10.0.154.167
-set firewall group address-group block_torrents address 10.0.154.71
-set firewall group address-group block_torrents description ''
-set firewall group address-group clean_25 description ''
-set firewall group address-group destination_hosts address 78.142.63.211
-set firewall group address-group destination_hosts address 217.174.152.200
-set firewall group address-group destination_hosts address 197.248.5.25
-set firewall group address-group destination_hosts address 196.216.245.46
-set firewall group address-group destination_hosts address 199.250.194.206
-set firewall group address-group destination_hosts address 108.167.133.25
-set firewall group address-group destination_hosts address 108.167.141.13
-set firewall group address-group destination_hosts address 209.182.211.237
-set firewall group address-group destination_hosts address 52.97.232.226
-set firewall group address-group destination_hosts description ''
-set firewall group address-group source_hosts address 10.0.154.57
-set firewall group address-group source_hosts address 10.0.154.129
-set firewall group address-group source_hosts address 10.0.154.131
-set firewall group address-group source_hosts address 10.0.154.138
-set firewall group address-group source_hosts address 192.168.0.0/24
-set firewall group address-group source_hosts description ''
-set firewall group address-group specials description ''
-set firewall group address-group watchdog description ''
+set firewall group network-group PRIVATE_NETS network 192.168.0.0/16
 set firewall group network-group PRIVATE_NETS network 172.16.0.0/12
 set firewall group network-group PRIVATE_NETS network 10.0.0.0/8
-set firewall group port-group destination_ports description ''
-set firewall group port-group destination_ports port 25
-set firewall group port-group destination_ports port 143
-set firewall group port-group destination_ports port 587
-set firewall group port-group destination_ports port 465
 set firewall ipv6-receive-redirects disable
 set firewall ipv6-src-route disable
 set firewall ip-src-route disable
@@ -60,23 +11,6 @@ set firewall modify balance rule 10 action modify
 set firewall modify balance rule 10 description 'do NOT load balance lan to lan'
 set firewall modify balance rule 10 destination group network-group PRIVATE_NETS
 set firewall modify balance rule 10 modify table main
-set firewall modify balance rule 11 action modify
-set firewall modify balance rule 11 destination group address-group destination_hosts
-set firewall modify balance rule 11 destination group port-group destination_ports
-set firewall modify balance rule 11 modify lb-group clean_pool
-set firewall modify balance rule 11 source group address-group source_hosts
-set firewall modify balance rule 12 action modify
-set firewall modify balance rule 12 destination port 25
-set firewall modify balance rule 12 modify lb-group CLEAN_25
-set firewall modify balance rule 12 protocol tcp
-set firewall modify balance rule 12 source group address-group clean_25
-set firewall modify balance rule 13 action modify
-set firewall modify balance rule 13 destination group port-group destination_ports
-set firewall modify balance rule 13 modify lb-group PIT_25
-set firewall modify balance rule 13 protocol tcp
-set firewall modify balance rule 19 action modify
-set firewall modify balance rule 19 modify lb-group ME
-set firewall modify balance rule 19 source group address-group ME
 set firewall modify balance rule 20 action modify
 set firewall modify balance rule 20 description 'do NOT load balance destination public address'
 set firewall modify balance rule 20 destination group address-group ADDRv4_eth0
@@ -89,507 +23,69 @@ set firewall modify balance rule 40 action modify
 set firewall modify balance rule 40 description 'do NOT load balance destination public address'
 set firewall modify balance rule 40 destination group address-group ADDRv4_eth2
 set firewall modify balance rule 40 modify table main
-set firewall modify balance rule 50 action modify
-set firewall modify balance rule 50 description 'do NOT load balance destination public address'
-set firewall modify balance rule 50 destination group address-group ADDRv4_eth3
-set firewall modify balance rule 50 modify table main
-set firewall modify balance rule 60 action modify
-set firewall modify balance rule 60 description 'do NOT load balance destination public address'
-set firewall modify balance rule 60 destination group address-group ADDRv4_eth4
-set firewall modify balance rule 60 modify table main
-set firewall modify balance rule 70 action modify
-set firewall modify balance rule 70 description 'do NOT load balance destination public address'
-set firewall modify balance rule 70 destination group address-group ADDRv4_eth5
-set firewall modify balance rule 70 modify table main
-set firewall modify balance rule 75 action modify
-set firewall modify balance rule 75 destination group address-group ZUKU
-set firewall modify balance rule 75 modify lb-group ZUKU
-set firewall modify balance rule 76 action modify
-set firewall modify balance rule 76 destination group address-group LIQUID
-set firewall modify balance rule 76 modify lb-group LIQUID
-set firewall modify balance rule 77 action modify
-set firewall modify balance rule 77 destination group address-group GOOGLE
-set firewall modify balance rule 77 modify lb-group GOOGLE
-set firewall modify balance rule 81 action modify
-set firewall modify balance rule 81 destination group address-group FACEBOOK
-set firewall modify balance rule 81 modify lb-group GOOGLE
-set firewall modify balance rule 82 action modify
-set firewall modify balance rule 82 destination group address-group FLIX
-set firewall modify balance rule 82 modify lb-group FACEBOOK
-set firewall modify balance rule 85 action modify
-set firewall modify balance rule 85 modify lb-group PIT_25
-set firewall modify balance rule 85 source group address-group block_torrents
-set firewall modify balance rule 101 action modify
-set firewall modify balance rule 101 modify lb-group H
-set firewall name ALL default-action accept
-set firewall name ALL description ''
-set firewall name ALL rule 10 action drop
-set firewall name ALL rule 10 description Disconnected
-set firewall name ALL rule 10 log disable
-set firewall name ALL rule 10 protocol all
-set firewall name ALL rule 10 source group address-group Disconnected-ips
-set firewall name ALL rule 10 state established enable
-set firewall name ALL rule 10 state invalid enable
-set firewall name ALL rule 10 state new enable
-set firewall name ALL rule 10 state related enable
-set firewall name ALL rule 20 action accept
-set firewall name ALL rule 20 description monitor_emails
-set firewall name ALL rule 20 destination group port-group destination_ports
-set firewall name ALL rule 20 log enable
-set firewall name ALL rule 20 protocol tcp
-set firewall name ALL rule 20 state established enable
-set firewall name ALL rule 20 state invalid enable
-set firewall name ALL rule 20 state new enable
-set firewall name ALL rule 20 state related enable
-set firewall name ALL rule 30 action drop
-set firewall name ALL rule 30 description spammers
-set firewall name ALL rule 30 destination group port-group destination_ports
-set firewall name ALL rule 30 log enable
-set firewall name ALL rule 30 protocol tcp_udp
-set firewall name ALL rule 30 source group address-group Spammers_25
-set firewall name ALL rule 30 state established enable
-set firewall name ALL rule 30 state invalid enable
-set firewall name ALL rule 30 state new enable
-set firewall name ALL rule 30 state related enable
-set firewall name ALL rule 40 action accept
-set firewall name ALL rule 40 description ucrm_allow_dns
-set firewall name ALL rule 40 destination port 53
-set firewall name ALL rule 40 log disable
-set firewall name ALL rule 40 protocol udp
-set firewall name ALL rule 40 source group address-group BLOCKED_USERS
-set firewall name ALL rule 50 action drop
-set firewall name ALL rule 50 description ucrm_drop_suspended
-set firewall name ALL rule 50 destination address '!10.0.154.3'
-set firewall name ALL rule 50 log disable
-set firewall name ALL rule 50 protocol all
-set firewall name ALL rule 50 source group address-group BLOCKED_USERS
-set firewall name ALL rule 60 action drop
-set firewall name ALL rule 60 description Block_torrents
-set firewall name ALL rule 60 log disable
-set firewall name ALL rule 60 p2p all
-set firewall name ALL rule 60 protocol all
-set firewall name ALL rule 60 source group address-group block_torrents
-set firewall name ALL rule 60 state established enable
-set firewall name ALL rule 60 state invalid enable
-set firewall name ALL rule 60 state new enable
-set firewall name ALL rule 60 state related enable
-set firewall name ALL rule 70 action drop
-set firewall name ALL rule 70 application category P2P
-set firewall name ALL rule 70 description Torrents
-set firewall name ALL rule 70 log disable
-set firewall name ALL rule 70 protocol all
-set firewall name ALL rule 70 source group address-group block_torrents
-set firewall name ALL rule 70 state established enable
-set firewall name ALL rule 70 state invalid enable
-set firewall name ALL rule 70 state new enable
-set firewall name ALL rule 70 state related enable
+set firewall modify balance rule 140 action modify
+set firewall modify balance rule 140 modify lb-group G
 set firewall receive-redirects disable
 set firewall send-redirects enable
 set firewall source-validation disable
 set firewall syn-cookies enable
-set interfaces ethernet eth0 address 192.168.3.2/24
-set interfaces ethernet eth0 description SIMBA1-238846
+set interfaces ethernet eth0 address 1.1.1.2/24
+set interfaces ethernet eth0 description WAN
 set interfaces ethernet eth0 duplex auto
 set interfaces ethernet eth0 speed auto
-set interfaces ethernet eth1 address 192.168.77.2/24
-set interfaces ethernet eth1 description SM-280611
-set interfaces ethernet eth1 disable
+set interfaces ethernet eth1 address 2.2.2.2/24
+set interfaces ethernet eth1 description 'WAN 2'
 set interfaces ethernet eth1 duplex auto
 set interfaces ethernet eth1 speed auto
-set interfaces ethernet eth2 address 192.168.103.33/24
-set interfaces ethernet eth2 description Tale
-set interfaces ethernet eth2 duplex full
-set interfaces ethernet eth2 speed 100
-set interfaces ethernet eth3 address 192.168.55.2/24
-set interfaces ethernet eth3 description LIQ105360
+set interfaces ethernet eth2 address 3.3.3.3/24
+set interfaces ethernet eth2 description 'WAN 3'
+set interfaces ethernet eth2 duplex auto
+set interfaces ethernet eth2 speed auto
 set interfaces ethernet eth3 duplex auto
 set interfaces ethernet eth3 speed auto
-set interfaces ethernet eth4 address 192.168.66.2/24
-set interfaces ethernet eth4 description LIQ106319
 set interfaces ethernet eth4 duplex auto
 set interfaces ethernet eth4 speed auto
-set interfaces ethernet eth5 address 192.168.7.2/24
-set interfaces ethernet eth5 description LIQ105818
-set interfaces ethernet eth5 disable
 set interfaces ethernet eth5 duplex auto
 set interfaces ethernet eth5 speed auto
-set interfaces ethernet eth6 address 192.168.6.2/24
-set interfaces ethernet eth6 description SM-220241
-set interfaces ethernet eth6 disable
 set interfaces ethernet eth6 duplex auto
 set interfaces ethernet eth6 speed auto
 set interfaces ethernet eth7 duplex auto
 set interfaces ethernet eth7 speed auto
 set interfaces ethernet eth8 duplex auto
 set interfaces ethernet eth8 speed auto
-set interfaces loopback lo
-set interfaces switch switch0 address 10.0.154.254/24
-set interfaces switch switch0 address 192.168.100.1/24
+set interfaces ethernet eth9 duplex auto
+set interfaces ethernet eth9 poe output off
+set interfaces ethernet eth9 speed auto
+set interfaces ethernet eth10 duplex auto
+set interfaces ethernet eth10 speed auto
+set interfaces ethernet eth11 duplex auto
+set interfaces ethernet eth11 speed auto
+set interfaces switch switch0 address 10.0.154.1/24
 set interfaces switch switch0 description Local
 set interfaces switch switch0 firewall in modify balance
-set interfaces switch switch0 firewall in name ALL
-set interfaces switch switch0 firewall local
-set interfaces switch switch0 firewall out
 set interfaces switch switch0 mtu 1500
+set interfaces switch switch0 switch-port interface eth3
+set interfaces switch switch0 switch-port interface eth4
+set interfaces switch switch0 switch-port interface eth5
+set interfaces switch switch0 switch-port interface eth6
 set interfaces switch switch0 switch-port interface eth7
 set interfaces switch switch0 switch-port vlan-aware disable
-set load-balance group CLEAN_25 interface eth2 route table 2
-set load-balance group CLEAN_25 interface eth5 failover-only
-set load-balance group CLEAN_25 interface eth5 route table 5
-set load-balance group CLEAN_25 lb-local enable
-set load-balance group CLEAN_25 lb-local-metric-change enable
-set load-balance group FACEBOOK interface eth0 route table 10
-set load-balance group FACEBOOK interface eth0 route-test initial-delay 60
-set load-balance group FACEBOOK interface eth0 route-test interval 10
-set load-balance group FACEBOOK interface eth0 route-test type ping target 4.2.2.2
-set load-balance group FACEBOOK interface eth0 weight 34
-set load-balance group FACEBOOK interface eth1 route table 1
-set load-balance group FACEBOOK interface eth1 route-test initial-delay 60
-set load-balance group FACEBOOK interface eth1 route-test interval 10
-set load-balance group FACEBOOK interface eth1 route-test type ping target 4.2.2.2
-set load-balance group FACEBOOK interface eth1 weight 33
-set load-balance group FACEBOOK interface eth2 route table 2
-set load-balance group FACEBOOK interface eth2 route-test initial-delay 60
-set load-balance group FACEBOOK interface eth2 route-test interval 10
-set load-balance group FACEBOOK interface eth2 route-test type ping target 4.2.2.2
-set load-balance group FACEBOOK interface eth2 weight 33
-set load-balance group FACEBOOK interface eth3 failover-only
-set load-balance group FACEBOOK interface eth3 route table 3
-set load-balance group FACEBOOK interface eth3 route-test initial-delay 60
-set load-balance group FACEBOOK interface eth3 route-test interval 10
-set load-balance group FACEBOOK interface eth3 route-test type
-set load-balance group FACEBOOK lb-local enable
-set load-balance group FACEBOOK lb-local-metric-change disable
-set load-balance group GOOGLE interface eth1 failover-only
-set load-balance group GOOGLE interface eth1 route table 1
-set load-balance group GOOGLE interface eth1 route-test initial-delay 60
-set load-balance group GOOGLE interface eth1 route-test interval 10
-set load-balance group GOOGLE interface eth1 route-test type
-set load-balance group GOOGLE interface eth3 route table 3
-set load-balance group GOOGLE interface eth3 route-test count failure 3
-set load-balance group GOOGLE interface eth3 route-test count success 3
-set load-balance group GOOGLE interface eth3 route-test initial-delay 60
-set load-balance group GOOGLE interface eth3 route-test interval 10
-set load-balance group GOOGLE interface eth3 route-test type ping target 8.8.8.8
-set load-balance group GOOGLE interface eth3 weight 33
-set load-balance group GOOGLE interface eth4 route table 4
-set load-balance group GOOGLE interface eth4 route-test count failure 3
-set load-balance group GOOGLE interface eth4 route-test count success 3
-set load-balance group GOOGLE interface eth4 route-test initial-delay 60
-set load-balance group GOOGLE interface eth4 route-test interval 10
-set load-balance group GOOGLE interface eth4 route-test type ping target 8.8.8.8
-set load-balance group GOOGLE interface eth4 weight 33
-set load-balance group GOOGLE interface eth5 route table 5
-set load-balance group GOOGLE interface eth5 route-test count failure 3
-set load-balance group GOOGLE interface eth5 route-test count success 3
-set load-balance group GOOGLE interface eth5 route-test initial-delay 60
-set load-balance group GOOGLE interface eth5 route-test interval 10
-set load-balance group GOOGLE interface eth5 route-test type ping target 8.8.8.8
-set load-balance group GOOGLE interface eth5 weight 34
-set load-balance group GOOGLE lb-local enable
-set load-balance group GOOGLE lb-local-metric-change disable
-set load-balance group GOOGLE transition-script /config/scripts/clearcon
-set load-balance group H interface eth0
-set load-balance group H interface eth2
-set load-balance group H interface eth3 failover-only
-set load-balance group H lb-local enable
-set load-balance group H lb-local-metric-change disable
-set load-balance group H sticky dest-addr enable
-set load-balance group H sticky source-addr enable
-set load-balance group H transition-script /config/scripts/clearcon
-set load-balance group LIQUID interface eth0 failover-only
-set load-balance group LIQUID interface eth0 route table 10
-set load-balance group LIQUID interface eth0 route-test initial-delay 60
-set load-balance group LIQUID interface eth0 route-test interval 10
-set load-balance group LIQUID interface eth3 route table 3
-set load-balance group LIQUID interface eth4 route table 4
-set load-balance group LIQUID interface eth5 route table 5
-set load-balance group LIQUID lb-local enable
-set load-balance group LIQUID lb-local-metric-change disable
-set load-balance group ME interface eth0 route table 10
-set load-balance group ME interface eth5 failover-only
-set load-balance group ME lb-local enable
-set load-balance group ME lb-local-metric-change disable
-set load-balance group PHARMAKEN interface eth0 failover-only
-set load-balance group PHARMAKEN interface eth0 route table 10
-set load-balance group PHARMAKEN interface eth3 route table 3
-set load-balance group PHARMAKEN lb-local enable
-set load-balance group PHARMAKEN lb-local-metric-change disable
-set load-balance group PIT_25 interface eth1 failover-only
-set load-balance group PIT_25 interface eth1 route table 1
-set load-balance group PIT_25 interface eth1 route-test initial-delay 60
-set load-balance group PIT_25 interface eth1 route-test interval 10
-set load-balance group PIT_25 interface eth3 route table 3
-set load-balance group PIT_25 interface eth4 route table 4
-set load-balance group PIT_25 interface eth5 route table 5
-set load-balance group PIT_25 lb-local enable
-set load-balance group PIT_25 lb-local-metric-change disable
-set load-balance group SPECIAL interface eth0 failover-only
-set load-balance group SPECIAL interface eth5 route table 5
-set load-balance group SPECIAL lb-local enable
-set load-balance group SPECIAL lb-local-metric-change disable
-set load-balance group ZUKU interface eth0 route table 10
-set load-balance group ZUKU interface eth0 route-test initial-delay 60
-set load-balance group ZUKU interface eth0 route-test interval 10
-set load-balance group ZUKU interface eth0 route-test type ping target 4.2.2.2
-set load-balance group ZUKU interface eth0 weight 30
-set load-balance group ZUKU interface eth1 route table 1
-set load-balance group ZUKU interface eth1 route-test initial-delay 60
-set load-balance group ZUKU interface eth1 route-test interval 10
-set load-balance group ZUKU interface eth1 route-test type ping target 4.2.2.2
-set load-balance group ZUKU interface eth1 weight 40
-set load-balance group ZUKU interface eth2 route table 2
-set load-balance group ZUKU interface eth2 route-test initial-delay 60
-set load-balance group ZUKU interface eth2 route-test interval 10
-set load-balance group ZUKU interface eth2 route-test type ping target 4.2.2.2
-set load-balance group ZUKU interface eth2 weight 30
-set load-balance group ZUKU interface eth4 failover-only
-set load-balance group ZUKU interface eth4 route table 4
-set load-balance group ZUKU interface eth4 route-test initial-delay 60
-set load-balance group ZUKU interface eth4 route-test interval 10
-set load-balance group ZUKU lb-local enable
-set load-balance group ZUKU lb-local-metric-change disable
-set load-balance group clean_pool interface eth2 route table 2
-set load-balance group clean_pool interface eth5 failover-only
-set load-balance group clean_pool interface eth5 route table 5
-set load-balance group clean_pool lb-local enable
-set load-balance group clean_pool lb-local-metric-change disable
-set port-forward auto-firewall enable
-set port-forward hairpin-nat enable
-set port-forward lan-interface switch0
-set port-forward rule 1 description Willie
-set port-forward rule 1 forward-to address 192.168.100.5
-set port-forward rule 1 forward-to port 810-820
-set port-forward rule 1 original-port 810-819
-set port-forward rule 1 protocol tcp_udp
-set port-forward rule 2 description Eurofix
-set port-forward rule 2 forward-to address 10.0.154.62
-set port-forward rule 2 forward-to port 2000-2002
-set port-forward rule 2 original-port 2000-2002
-set port-forward rule 2 protocol tcp_udp
-set port-forward rule 3 description UnigasKE
-set port-forward rule 3 forward-to address 10.0.154.193
-set port-forward rule 3 forward-to port 2003-2006
-set port-forward rule 3 original-port 2003-2006
-set port-forward rule 3 protocol tcp_udp
-set port-forward rule 4 description 'Mike Golf'
-set port-forward rule 4 forward-to address 10.0.154.198
-set port-forward rule 4 forward-to port 2007-2010
-set port-forward rule 4 original-port 2007-2010
-set port-forward rule 4 protocol tcp_udp
-set port-forward rule 5 description Willie
-set port-forward rule 5 forward-to address 192.168.100.5
-set port-forward rule 5 forward-to port 820
-set port-forward rule 5 original-port 820
-set port-forward rule 5 protocol tcp_udp
-set port-forward rule 6 description Willie
-set port-forward rule 6 forward-to address 192.168.100.5
-set port-forward rule 6 forward-to port 821
-set port-forward rule 6 original-port 821
-set port-forward rule 6 protocol tcp_udp
-set port-forward rule 7 description SW
-set port-forward rule 7 forward-to address 10.0.154.23
-set port-forward rule 7 forward-to port 443
-set port-forward rule 7 original-port 90
-set port-forward rule 7 protocol tcp_udp
-set port-forward rule 8 description UCRM
-set port-forward rule 8 forward-to address 10.0.154.3
-set port-forward rule 8 forward-to port 80
-set port-forward rule 8 original-port 80,1111
-set port-forward rule 8 protocol tcp_udp
-set port-forward rule 9 description UCRM
-set port-forward rule 9 forward-to address 10.0.154.3
-set port-forward rule 9 forward-to port 443
-set port-forward rule 9 original-port 443
-set port-forward rule 9 protocol tcp_udp
-set port-forward rule 10 description UCRM
-set port-forward rule 10 forward-to address 10.0.154.3
-set port-forward rule 10 forward-to port 9080
-set port-forward rule 10 original-port 9080
-set port-forward rule 10 protocol tcp_udp
-set port-forward rule 11 description UCRM
-set port-forward rule 11 forward-to address 10.0.154.3
-set port-forward rule 11 forward-to port 9443
-set port-forward rule 11 original-port 9443
-set port-forward rule 11 protocol tcp_udp
-set port-forward rule 12 description myshwll
-set port-forward rule 12 forward-to address 10.0.154.57
-set port-forward rule 12 forward-to port 443
-set port-forward rule 12 original-port 1057
-set port-forward rule 12 protocol tcp_udp
-set port-forward rule 13 description MaweniChem
-set port-forward rule 13 forward-to address 10.0.154.99
-set port-forward rule 13 forward-to port 443
-set port-forward rule 13 original-port 1099
-set port-forward rule 13 protocol tcp_udp
-set port-forward rule 14 description NYL_WST-AP
-set port-forward rule 14 forward-to address 10.0.154.20
-set port-forward rule 14 forward-to port 443
-set port-forward rule 14 original-port 1020
-set port-forward rule 14 protocol tcp_udp
-set port-forward rule 15 description palmedgepoint
-set port-forward rule 15 forward-to address 10.0.154.14
-set port-forward rule 15 forward-to port 443
-set port-forward rule 15 original-port 1014
-set port-forward rule 15 protocol tcp_udp
-set port-forward rule 16 description KsmHeights
-set port-forward rule 16 forward-to address 10.0.154.33
-set port-forward rule 16 forward-to port 3000
-set port-forward rule 16 original-port 3000
-set port-forward rule 16 protocol tcp_udp
-set port-forward rule 17 description Router
-set port-forward rule 17 forward-to address 10.0.154.33
-set port-forward rule 17 forward-to port 1000
-set port-forward rule 17 original-port 3001
-set port-forward rule 17 protocol tcp_udp
-set port-forward rule 18 description LBM
-set port-forward rule 18 forward-to address 10.0.154.33
-set port-forward rule 18 forward-to port 443
-set port-forward rule 18 original-port 3002
-set port-forward rule 18 protocol tcp_udp
-set port-forward rule 19 description ''
-set port-forward rule 19 forward-to address 10.0.154.33
-set port-forward rule 19 forward-to port 3003
-set port-forward rule 19 original-port 3003
-set port-forward rule 19 protocol tcp_udp
-set port-forward rule 20 description ''
-set port-forward rule 20 forward-to address 10.0.154.33
-set port-forward rule 20 forward-to port 3004
-set port-forward rule 20 original-port 3004
-set port-forward rule 20 protocol tcp_udp
-set port-forward rule 21 description ''
-set port-forward rule 21 forward-to address 10.0.154.33
-set port-forward rule 21 forward-to port 3005
-set port-forward rule 21 original-port 3005
-set port-forward rule 21 protocol tcp_udp
-set port-forward rule 22 description ''
-set port-forward rule 22 forward-to address 10.0.154.33
-set port-forward rule 22 forward-to port 3006
-set port-forward rule 22 original-port 3006
-set port-forward rule 22 protocol tcp_udp
-set port-forward rule 23 description ''
-set port-forward rule 23 forward-to address 10.0.154.33
-set port-forward rule 23 forward-to port 554
-set port-forward rule 23 original-port 554
-set port-forward rule 23 protocol tcp_udp
-set port-forward rule 24 description ''
-set port-forward rule 24 forward-to address 10.0.154.15
-set port-forward rule 24 forward-to port 443
-set port-forward rule 24 original-port 1015
-set port-forward rule 24 protocol tcp_udp
-set port-forward rule 25 description OldT
-set port-forward rule 25 forward-to address 10.0.154.118
-set port-forward rule 25 forward-to port 443
-set port-forward rule 25 original-port 1118
-set port-forward rule 25 protocol tcp_udp
-set port-forward rule 26 description ''
-set port-forward rule 26 forward-to address 10.0.154.144
-set port-forward rule 26 forward-to port 3000
-set port-forward rule 26 original-port 4444
-set port-forward rule 26 protocol tcp_udp
-set port-forward rule 27 description ''
-set port-forward rule 27 forward-to address 10.0.154.17
-set port-forward rule 27 forward-to port 443
-set port-forward rule 27 original-port 1017
-set port-forward rule 27 protocol tcp_udp
-set port-forward rule 28 description ''
-set port-forward rule 28 forward-to address 10.0.154.74
-set port-forward rule 28 forward-to port 443
-set port-forward rule 28 original-port 1074
-set port-forward rule 28 protocol tcp_udp
-set port-forward rule 29 description ''
-set port-forward rule 29 forward-to address 10.0.154.33
-set port-forward rule 29 forward-to port 443
-set port-forward rule 29 original-port 1033
-set port-forward rule 29 protocol tcp_udp
-set port-forward rule 30 description cloudkey
-set port-forward rule 30 forward-to address 10.0.154.200
-set port-forward rule 30 forward-to port 443
-set port-forward rule 30 original-port 1200
-set port-forward rule 30 protocol tcp_udp
-set port-forward rule 31 description Pharmaken
-set port-forward rule 31 forward-to address 10.0.154.30
-set port-forward rule 31 forward-to port 37777
-set port-forward rule 31 original-port 37777
-set port-forward rule 31 protocol tcp_udp
-set port-forward rule 32 description Pharmaken
-set port-forward rule 32 forward-to address 10.0.154.30
-set port-forward rule 32 forward-to port 37779
-set port-forward rule 32 original-port 37779
-set port-forward rule 32 protocol tcp_udp
-set port-forward rule 33 description Pharmaken
-set port-forward rule 33 forward-to address 10.0.154.30
-set port-forward rule 33 forward-to port 3001
-set port-forward rule 33 original-port 3001
-set port-forward rule 33 protocol tcp_udp
-set port-forward rule 34 description Pharmaken
-set port-forward rule 34 forward-to address 10.0.154.30
-set port-forward rule 34 forward-to port 3002
-set port-forward rule 34 original-port 3002
-set port-forward rule 34 protocol tcp_udp
-set port-forward rule 35 description Pharmaken
-set port-forward rule 35 forward-to address 10.0.154.30
-set port-forward rule 35 forward-to port 4003
-set port-forward rule 35 original-port 4003
-set port-forward rule 35 protocol tcp_udp
-set port-forward rule 36 description Pharmaken
-set port-forward rule 36 forward-to address 10.0.154.30
-set port-forward rule 36 forward-to port 4004
-set port-forward rule 36 original-port 4004
-set port-forward rule 36 protocol tcp_udp
-set port-forward rule 37 description AFB
-set port-forward rule 37 forward-to address 10.0.154.11
-set port-forward rule 37 forward-to port 443
-set port-forward rule 37 original-port 1011
-set port-forward rule 37 protocol tcp_udp
-set port-forward rule 38 description CoreSW
-set port-forward rule 38 forward-to address 10.0.154.25
-set port-forward rule 38 forward-to port 443
-set port-forward rule 38 original-port 4000
-set port-forward rule 38 protocol tcp_udp
-set port-forward rule 39 description Job
-set port-forward rule 39 forward-to address 10.0.154.211
-set port-forward rule 39 forward-to port 1000
-set port-forward rule 39 original-port 1211
-set port-forward rule 39 protocol tcp_udp
-set port-forward rule 40 description 'AFB BM'
-set port-forward rule 40 forward-to address 10.0.154.12
-set port-forward rule 40 forward-to port 443
-set port-forward rule 40 original-port 1012
-set port-forward rule 40 protocol tcp_udp
-set port-forward rule 41 description Reseter
-set port-forward rule 41 forward-to address 10.0.154.5
-set port-forward rule 41 forward-to port 80
-set port-forward rule 41 original-port 40
-set port-forward rule 41 protocol tcp_udp
-set port-forward wan-interface eth0
-set protocols static route 0.0.0.0/0 next-hop 192.168.3.1
-set protocols static route 0.0.0.0/0 next-hop 192.168.6.1
-set protocols static route 0.0.0.0/0 next-hop 192.168.7.1
-set protocols static route 0.0.0.0/0 next-hop 192.168.55.1
-set protocols static route 0.0.0.0/0 next-hop 192.168.66.1
-set protocols static route 0.0.0.0/0 next-hop 192.168.77.1
-set protocols static route 0.0.0.0/0 next-hop 192.168.103.1
-set protocols static table 1 route 0.0.0.0/0 next-hop 192.168.77.1
-set protocols static table 2 route 0.0.0.0/0 next-hop 192.168.103.1
-set protocols static table 3 route 0.0.0.0/0 next-hop 192.168.55.1
-set protocols static table 4 route 0.0.0.0/0 next-hop 192.168.66.1
-set protocols static table 5 route 0.0.0.0/0 next-hop 192.168.7.1
-set protocols static table 10 route 0.0.0.0/0 next-hop 192.168.3.1
-set protocols static table 16 route 0.0.0.0/0 next-hop 192.168.6.1
-set service dns forwarding cache-size 150
+set load-balance group G exclude-local-dns disable
+set load-balance group G flush-on-active enable
+set load-balance group G gateway-update-interval 20
+set load-balance group G interface eth0
+set load-balance group G interface eth1 failover-only
+set load-balance group G interface eth2
+set load-balance group G lb-local enable
+set load-balance group G lb-local-metric-change disable
+set protocols static route 0.0.0.0/0 next-hop 1.1.1.1
+set protocols static route 0.0.0.0/0 next-hop 2.2.2.1
+set protocols static route 0.0.0.0/0 next-hop 3.3.3.1
+set service dns forwarding cache-size 10000
 set service dns forwarding listen-on switch0
-set service gui http-port 7080
-set service gui https-port 7443
+set service gui http-port 80
+set service gui https-port 443
 set service gui older-ciphers enable
-set service nat rule 1 description ucrm_forward_suspended_eth0
-set service nat rule 1 inbound-interface switch0
-set service nat rule 1 inside-address address 10.0.154.3
-set service nat rule 1 inside-address port 2001
-set service nat rule 1 log disable
-set service nat rule 1 protocol tcp
-set service nat rule 1 source group address-group BLOCKED_USERS
-set service nat rule 1 type destination
 set service nat rule 5000 description 'masquerade for WAN'
 set service nat rule 5000 outbound-interface eth0
 set service nat rule 5000 type masquerade
@@ -599,68 +95,22 @@ set service nat rule 5002 type masquerade
 set service nat rule 5004 description 'masquerade for WAN 3'
 set service nat rule 5004 outbound-interface eth2
 set service nat rule 5004 type masquerade
-set service nat rule 5006 description 'masquerade for WAN 4'
-set service nat rule 5006 outbound-interface eth3
-set service nat rule 5006 type masquerade
-set service nat rule 5008 description 'masquerade for WAN 5'
-set service nat rule 5008 outbound-interface eth4
-set service nat rule 5008 type masquerade
-set service nat rule 5010 description 'masquerade for WAN 6'
-set service nat rule 5010 outbound-interface eth5
-set service nat rule 5010 type masquerade
-set service nat rule 5011 description 'masquerade for WAN 7'
-set service nat rule 5011 log disable
-set service nat rule 5011 outbound-interface eth6
-set service nat rule 5011 protocol all
-set service nat rule 5011 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
-set service unms connection 'wss://10.0.154.3:9443+9exGQ9uBNb03M4Iqwh7AW9852kdaXRVZMFO1eGH_i7wAAAAA+allowSelfSignedCertificate'
 set system conntrack expect-table-size 4096
 set system conntrack hash-size 4096
 set system conntrack table-size 32768
 set system conntrack tcp half-open-connections 512
 set system conntrack tcp loose enable
 set system conntrack tcp max-retrans 3
-set system flow-accounting disable-memory-table
-set system flow-accounting ingress-capture post-dnat
-set system flow-accounting interface switch0
-set system flow-accounting netflow enable-egress engine-id 1
-set system flow-accounting netflow engine-id 0
-set system flow-accounting netflow server 10.0.154.3 port 2056
-set system flow-accounting netflow timeout expiry-interval 60
-set system flow-accounting netflow timeout flow-generic 60
-set system flow-accounting netflow timeout icmp 60
-set system flow-accounting netflow timeout max-active-life 60
-set system flow-accounting netflow timeout tcp-fin 10
-set system flow-accounting netflow timeout tcp-generic 60
-set system flow-accounting netflow timeout tcp-rst 10
-set system flow-accounting netflow timeout udp 60
-set system flow-accounting netflow version 9
-set system flow-accounting syslog-facility daemon
-set system host-name Master
-set system login user admin authentication encrypted-password '$6$nRA9askPFuGdN9vX$MUPamuaaaHDWSkSpK8K7271sQzsSqsLNk5I3lHGOUt6cjMS2m6izVEfVHTq6Ln/WGGIOj70MXYWYMmJb080/h.'
+set system host-name EdgeRouter-12
+set system login user admin authentication encrypted-password '$5$Kn4IAtaHuF6/1pIp$b6m7bxw36/T8ULlzJ25KROhbPcLaU7v74S3vJ0eThpC'
 set system login user admin level admin
 set system name-server 8.8.8.8
 set system ntp server 0.ubnt.pool.ntp.org
 set system ntp server 1.ubnt.pool.ntp.org
 set system ntp server 2.ubnt.pool.ntp.org
 set system ntp server 3.ubnt.pool.ntp.org
-set system offload hwnat disable
-set system offload ipsec enable
-set system offload ipv4 forwarding enable
-set system offload ipv4 gre enable
-set system offload ipv4 pppoe enable
-set system offload ipv4 vlan enable
-set system offload ipv6 forwarding enable
-set system offload ipv6 pppoe enable
 set system syslog global facility all level notice
 set system syslog global facility protocols level debug
-set system syslog host 'logs3.papertrailapp.com:34303' facility all level debug
-set system time-zone Africa/Nairobi
-set system traffic-analysis dpi enable
-set system traffic-analysis export enable
-set traffic-control advanced-queue queue-type fq-codel UCRM_FQ_CODEL
-set traffic-control advanced-queue root queue 32767 attach-to global
-set traffic-control advanced-queue root queue 32767 bandwidth 1000mbit
-set traffic-control advanced-queue root queue 32767 description UCRM
+set system time-zone UTC
