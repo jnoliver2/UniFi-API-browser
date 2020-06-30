@@ -11,6 +11,22 @@ set firewall modify balance rule 10 action modify
 set firewall modify balance rule 10 description 'do NOT load balance lan to lan'
 set firewall modify balance rule 10 destination group network-group PRIVATE_NETS
 set firewall modify balance rule 10 modify table main
+set firewall modify balance rule 60 action modify
+set firewall modify balance rule 60 description 'do NOT load balance destination public address'
+set firewall modify balance rule 60 destination group address-group ADDRv4_eth4
+set firewall modify balance rule 60 modify table main
+set firewall modify balance rule 70 action modify
+set firewall modify balance rule 70 description 'do NOT load balance destination public address'
+set firewall modify balance rule 70 destination group address-group ADDRv4_eth5
+set firewall modify balance rule 70 modify table main
+set firewall modify balance rule 80 action modify
+set firewall modify balance rule 80 description 'do NOT load balance destination public address'
+set firewall modify balance rule 80 destination group address-group ADDRv4_eth6
+set firewall modify balance rule 80 modify table main
+set firewall modify balance rule 90 action modify
+set firewall modify balance rule 90 description 'do NOT load balance destination public address'
+set firewall modify balance rule 90 destination group address-group ADDRv4_eth7
+set firewall modify balance rule 90 modify table main
 set firewall modify balance rule 100 action modify
 set firewall modify balance rule 100 description 'do NOT load balance destination public address'
 set firewall modify balance rule 100 destination group address-group ADDRv4_eth8
@@ -27,26 +43,36 @@ set firewall source-validation disable
 set firewall syn-cookies enable
 set interfaces ethernet eth0 duplex auto
 set interfaces ethernet eth0 speed auto
+set interfaces ethernet eth1 description EdgeSwitch
 set interfaces ethernet eth1 duplex auto
 set interfaces ethernet eth1 speed auto
+set interfaces ethernet eth2 description 'POE Switch'
 set interfaces ethernet eth2 duplex auto
 set interfaces ethernet eth2 speed auto
 set interfaces ethernet eth3 duplex auto
 set interfaces ethernet eth3 speed auto
+set interfaces ethernet eth4 address 192.168.110.2/24
+set interfaces ethernet eth4 description WAN
 set interfaces ethernet eth4 duplex auto
 set interfaces ethernet eth4 speed auto
+set interfaces ethernet eth5 address 192.168.120.2/24
+set interfaces ethernet eth5 description 'WAN 2'
 set interfaces ethernet eth5 duplex auto
 set interfaces ethernet eth5 speed auto
+set interfaces ethernet eth6 address 192.168.130.2/24
+set interfaces ethernet eth6 description 'WAN 3'
 set interfaces ethernet eth6 duplex auto
 set interfaces ethernet eth6 speed auto
+set interfaces ethernet eth7 address 192.168.55.2/24
+set interfaces ethernet eth7 description 'WAN 4'
 set interfaces ethernet eth7 duplex auto
 set interfaces ethernet eth7 speed auto
-set interfaces ethernet eth8 address 192.168.100.5/24
-set interfaces ethernet eth8 description WAN
+set interfaces ethernet eth8 address 192.168.66.2/24
+set interfaces ethernet eth8 description 'WAN 5'
 set interfaces ethernet eth8 duplex auto
 set interfaces ethernet eth8 speed auto
-set interfaces ethernet eth9 address 192.168.10.5/24
-set interfaces ethernet eth9 description 'WAN 2'
+set interfaces ethernet eth9 address 192.168.100.2/24
+set interfaces ethernet eth9 description 'WAN 6'
 set interfaces ethernet eth9 duplex auto
 set interfaces ethernet eth9 poe output off
 set interfaces ethernet eth9 speed auto
@@ -55,6 +81,7 @@ set interfaces ethernet eth10 speed auto
 set interfaces ethernet eth11 duplex auto
 set interfaces ethernet eth11 speed auto
 set interfaces switch switch0 address 10.0.154.1/24
+set interfaces switch switch0 address 10.0.154.2/24
 set interfaces switch switch0 description Local
 set interfaces switch switch0 firewall in modify balance
 set interfaces switch switch0 mtu 1500
@@ -62,29 +89,45 @@ set interfaces switch switch0 switch-port interface eth0
 set interfaces switch switch0 switch-port interface eth1
 set interfaces switch switch0 switch-port interface eth2
 set interfaces switch switch0 switch-port interface eth3
-set interfaces switch switch0 switch-port interface eth4
-set interfaces switch switch0 switch-port interface eth5
-set interfaces switch switch0 switch-port interface eth6
-set interfaces switch switch0 switch-port interface eth7
 set interfaces switch switch0 switch-port vlan-aware disable
 set load-balance group G exclude-local-dns disable
 set load-balance group G flush-on-active enable
 set load-balance group G gateway-update-interval 20
+set load-balance group G interface eth4
+set load-balance group G interface eth5
+set load-balance group G interface eth6
+set load-balance group G interface eth7
 set load-balance group G interface eth8
-set load-balance group G interface eth9 failover-only
+set load-balance group G interface eth9
 set load-balance group G lb-local enable
 set load-balance group G lb-local-metric-change disable
-set protocols static route 0.0.0.0/0 next-hop 192.168.10.1
+set protocols static route 0.0.0.0/0 next-hop 192.168.55.1
+set protocols static route 0.0.0.0/0 next-hop 192.168.66.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.100.1
+set protocols static route 0.0.0.0/0 next-hop 192.168.110.1
+set protocols static route 0.0.0.0/0 next-hop 192.168.120.1
+set protocols static route 0.0.0.0/0 next-hop 192.168.130.1
 set service dns forwarding cache-size 10000
 set service dns forwarding listen-on switch0
 set service gui http-port 80
 set service gui https-port 443
 set service gui older-ciphers enable
-set service nat rule 5016 description 'masquerade for WAN'
+set service nat rule 5008 description 'masquerade for WAN'
+set service nat rule 5008 outbound-interface eth4
+set service nat rule 5008 type masquerade
+set service nat rule 5010 description 'masquerade for WAN 2'
+set service nat rule 5010 outbound-interface eth5
+set service nat rule 5010 type masquerade
+set service nat rule 5012 description 'masquerade for WAN 3'
+set service nat rule 5012 outbound-interface eth6
+set service nat rule 5012 type masquerade
+set service nat rule 5014 description 'masquerade for WAN 4'
+set service nat rule 5014 outbound-interface eth7
+set service nat rule 5014 type masquerade
+set service nat rule 5016 description 'masquerade for WAN 5'
 set service nat rule 5016 outbound-interface eth8
 set service nat rule 5016 type masquerade
-set service nat rule 5018 description 'masquerade for WAN 2'
+set service nat rule 5018 description 'masquerade for WAN 6'
 set service nat rule 5018 outbound-interface eth9
 set service nat rule 5018 type masquerade
 set service ssh port 22
@@ -96,7 +139,7 @@ set system conntrack tcp half-open-connections 512
 set system conntrack tcp loose enable
 set system conntrack tcp max-retrans 3
 set system host-name EdgeRouter-12
-set system login user admin authentication encrypted-password '$5$oRWPvugSlASZQNG9$0OAb7twoXq78TVkPUSeo2GTTqw1a0BMTj/PmCQ5pRFD'
+set system login user admin authentication encrypted-password '$5$Z8JpcW2pXyNNdvTN$NN8QXk7HniVXxbzydN7GfIM7YtBY9aXlo2jSJWb8VeD'
 set system login user admin level admin
 set system name-server 8.8.8.8
 set system ntp server 0.ubnt.pool.ntp.org
