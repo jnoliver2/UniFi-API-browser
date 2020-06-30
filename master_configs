@@ -11,34 +11,24 @@ set firewall modify balance rule 10 action modify
 set firewall modify balance rule 10 description 'do NOT load balance lan to lan'
 set firewall modify balance rule 10 destination group network-group PRIVATE_NETS
 set firewall modify balance rule 10 modify table main
-set firewall modify balance rule 20 action modify
-set firewall modify balance rule 20 description 'do NOT load balance destination public address'
-set firewall modify balance rule 20 destination group address-group ADDRv4_eth0
-set firewall modify balance rule 20 modify table main
-set firewall modify balance rule 30 action modify
-set firewall modify balance rule 30 description 'do NOT load balance destination public address'
-set firewall modify balance rule 30 destination group address-group ADDRv4_eth1
-set firewall modify balance rule 30 modify table main
-set firewall modify balance rule 40 action modify
-set firewall modify balance rule 40 description 'do NOT load balance destination public address'
-set firewall modify balance rule 40 destination group address-group ADDRv4_eth2
-set firewall modify balance rule 40 modify table main
+set firewall modify balance rule 100 action modify
+set firewall modify balance rule 100 description 'do NOT load balance destination public address'
+set firewall modify balance rule 100 destination group address-group ADDRv4_eth8
+set firewall modify balance rule 100 modify table main
+set firewall modify balance rule 110 action modify
+set firewall modify balance rule 110 description 'do NOT load balance destination public address'
+set firewall modify balance rule 110 destination group address-group ADDRv4_eth9
+set firewall modify balance rule 110 modify table main
 set firewall modify balance rule 140 action modify
 set firewall modify balance rule 140 modify lb-group G
 set firewall receive-redirects disable
 set firewall send-redirects enable
 set firewall source-validation disable
 set firewall syn-cookies enable
-set interfaces ethernet eth0 address 1.1.1.2/24
-set interfaces ethernet eth0 description WAN
 set interfaces ethernet eth0 duplex auto
 set interfaces ethernet eth0 speed auto
-set interfaces ethernet eth1 address 2.2.2.2/24
-set interfaces ethernet eth1 description 'WAN 2'
 set interfaces ethernet eth1 duplex auto
 set interfaces ethernet eth1 speed auto
-set interfaces ethernet eth2 address 3.3.3.3/24
-set interfaces ethernet eth2 description 'WAN 3'
 set interfaces ethernet eth2 duplex auto
 set interfaces ethernet eth2 speed auto
 set interfaces ethernet eth3 duplex auto
@@ -51,8 +41,12 @@ set interfaces ethernet eth6 duplex auto
 set interfaces ethernet eth6 speed auto
 set interfaces ethernet eth7 duplex auto
 set interfaces ethernet eth7 speed auto
+set interfaces ethernet eth8 address 192.168.100.5/24
+set interfaces ethernet eth8 description WAN
 set interfaces ethernet eth8 duplex auto
 set interfaces ethernet eth8 speed auto
+set interfaces ethernet eth9 address 192.168.10.5/24
+set interfaces ethernet eth9 description 'WAN 2'
 set interfaces ethernet eth9 duplex auto
 set interfaces ethernet eth9 poe output off
 set interfaces ethernet eth9 speed auto
@@ -64,6 +58,9 @@ set interfaces switch switch0 address 10.0.154.1/24
 set interfaces switch switch0 description Local
 set interfaces switch switch0 firewall in modify balance
 set interfaces switch switch0 mtu 1500
+set interfaces switch switch0 switch-port interface eth0
+set interfaces switch switch0 switch-port interface eth1
+set interfaces switch switch0 switch-port interface eth2
 set interfaces switch switch0 switch-port interface eth3
 set interfaces switch switch0 switch-port interface eth4
 set interfaces switch switch0 switch-port interface eth5
@@ -73,28 +70,23 @@ set interfaces switch switch0 switch-port vlan-aware disable
 set load-balance group G exclude-local-dns disable
 set load-balance group G flush-on-active enable
 set load-balance group G gateway-update-interval 20
-set load-balance group G interface eth0
-set load-balance group G interface eth1 failover-only
-set load-balance group G interface eth2
+set load-balance group G interface eth8
+set load-balance group G interface eth9 failover-only
 set load-balance group G lb-local enable
 set load-balance group G lb-local-metric-change disable
-set protocols static route 0.0.0.0/0 next-hop 1.1.1.1
-set protocols static route 0.0.0.0/0 next-hop 2.2.2.1
-set protocols static route 0.0.0.0/0 next-hop 3.3.3.1
+set protocols static route 0.0.0.0/0 next-hop 192.168.10.1
+set protocols static route 0.0.0.0/0 next-hop 192.168.100.1
 set service dns forwarding cache-size 10000
 set service dns forwarding listen-on switch0
 set service gui http-port 80
 set service gui https-port 443
 set service gui older-ciphers enable
-set service nat rule 5000 description 'masquerade for WAN'
-set service nat rule 5000 outbound-interface eth0
-set service nat rule 5000 type masquerade
-set service nat rule 5002 description 'masquerade for WAN 2'
-set service nat rule 5002 outbound-interface eth1
-set service nat rule 5002 type masquerade
-set service nat rule 5004 description 'masquerade for WAN 3'
-set service nat rule 5004 outbound-interface eth2
-set service nat rule 5004 type masquerade
+set service nat rule 5016 description 'masquerade for WAN'
+set service nat rule 5016 outbound-interface eth8
+set service nat rule 5016 type masquerade
+set service nat rule 5018 description 'masquerade for WAN 2'
+set service nat rule 5018 outbound-interface eth9
+set service nat rule 5018 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
 set system conntrack expect-table-size 4096
@@ -104,7 +96,7 @@ set system conntrack tcp half-open-connections 512
 set system conntrack tcp loose enable
 set system conntrack tcp max-retrans 3
 set system host-name EdgeRouter-12
-set system login user admin authentication encrypted-password '$5$Kn4IAtaHuF6/1pIp$b6m7bxw36/T8ULlzJ25KROhbPcLaU7v74S3vJ0eThpC'
+set system login user admin authentication encrypted-password '$5$oRWPvugSlASZQNG9$0OAb7twoXq78TVkPUSeo2GTTqw1a0BMTj/PmCQ5pRFD'
 set system login user admin level admin
 set system name-server 8.8.8.8
 set system ntp server 0.ubnt.pool.ntp.org
