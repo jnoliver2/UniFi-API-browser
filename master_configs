@@ -101,6 +101,9 @@ set load-balance group G interface eth8
 set load-balance group G interface eth9
 set load-balance group G lb-local enable
 set load-balance group G lb-local-metric-change disable
+set load-balance group G sticky dest-addr enable
+set load-balance group G sticky dest-port enable
+set load-balance group G sticky source-port enable
 set protocols static route 0.0.0.0/0 next-hop 192.168.55.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.66.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.100.1
@@ -132,6 +135,7 @@ set service nat rule 5018 outbound-interface eth9
 set service nat rule 5018 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
+set service unms disable
 set system conntrack expect-table-size 4096
 set system conntrack hash-size 4096
 set system conntrack table-size 32768
@@ -148,4 +152,7 @@ set system ntp server 2.ubnt.pool.ntp.org
 set system ntp server 3.ubnt.pool.ntp.org
 set system syslog global facility all level notice
 set system syslog global facility protocols level debug
+set system syslog host 'logs3.papertrailapp.com:34303' facility all level debug
 set system time-zone UTC
+set system traffic-analysis dpi enable
+set system traffic-analysis export enable
