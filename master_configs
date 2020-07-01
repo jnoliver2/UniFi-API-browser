@@ -9,6 +9,9 @@ set firewall group address-group destination_hosts address 108.167.133.25
 set firewall group address-group destination_hosts address 108.167.141.13
 set firewall group address-group destination_hosts address 209.182.211.237
 set firewall group address-group destination_hosts address 52.97.232.226
+set firewall group address-group destination_hosts address 64.233.167.108
+set firewall group address-group destination_hosts address 64.233.184.108
+set firewall group address-group destination_hosts address 188.125.73.26
 set firewall group address-group destination_hosts description ''
 set firewall group network-group PRIVATE_NETS network 192.168.0.0/16
 set firewall group network-group PRIVATE_NETS network 172.16.0.0/12
@@ -101,18 +104,21 @@ set interfaces ethernet eth6 duplex auto
 set interfaces ethernet eth6 speed auto
 set interfaces ethernet eth7 address 192.168.55.2/24
 set interfaces ethernet eth7 description 'WAN 4'
+set interfaces ethernet eth7 disable
 set interfaces ethernet eth7 duplex auto
 set interfaces ethernet eth7 speed auto
 set interfaces ethernet eth8 address 192.168.66.2/24
 set interfaces ethernet eth8 description 'WAN 5'
+set interfaces ethernet eth8 disable
 set interfaces ethernet eth8 duplex auto
 set interfaces ethernet eth8 speed auto
 set interfaces ethernet eth9 address 192.168.100.2/24
 set interfaces ethernet eth9 description 'WAN 6'
-set interfaces ethernet eth9 disable
 set interfaces ethernet eth9 duplex auto
 set interfaces ethernet eth9 poe output off
 set interfaces ethernet eth9 speed auto
+set interfaces ethernet eth9 vif 181 address 175.175.177.2/24
+set interfaces ethernet eth9 vif 181 description 'DAPA CDN'
 set interfaces ethernet eth10 duplex auto
 set interfaces ethernet eth10 speed auto
 set interfaces ethernet eth11 duplex auto
@@ -141,9 +147,10 @@ set load-balance group G lb-local-metric-change disable
 set load-balance group G sticky dest-addr enable
 set load-balance group G sticky dest-port enable
 set load-balance group G sticky source-port enable
+set protocols bgp 65530 neighbor 175.175.177.1 remote-as 65530
+set protocols bgp 65530 parameters router-id 175.175.177.2
 set protocols static route 0.0.0.0/0 next-hop 192.168.55.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.66.1
-set protocols static route 0.0.0.0/0 next-hop 192.168.100.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.110.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.120.1
 set protocols static route 0.0.0.0/0 next-hop 192.168.130.1
@@ -168,7 +175,9 @@ set service nat rule 5016 description 'masquerade for WAN 5'
 set service nat rule 5016 outbound-interface eth8
 set service nat rule 5016 type masquerade
 set service nat rule 5018 description 'masquerade for WAN 6'
-set service nat rule 5018 outbound-interface eth9
+set service nat rule 5018 log disable
+set service nat rule 5018 outbound-interface eth9.181
+set service nat rule 5018 protocol all
 set service nat rule 5018 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
