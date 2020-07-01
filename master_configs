@@ -1,8 +1,23 @@
 set firewall all-ping enable
 set firewall broadcast-ping disable
+set firewall group address-group destination_hosts address 78.142.63.211
+set firewall group address-group destination_hosts address 217.174.152.200
+set firewall group address-group destination_hosts address 197.248.5.25
+set firewall group address-group destination_hosts address 196.216.245.46
+set firewall group address-group destination_hosts address 199.250.194.206
+set firewall group address-group destination_hosts address 108.167.133.25
+set firewall group address-group destination_hosts address 108.167.141.13
+set firewall group address-group destination_hosts address 209.182.211.237
+set firewall group address-group destination_hosts address 52.97.232.226
+set firewall group address-group destination_hosts description ''
 set firewall group network-group PRIVATE_NETS network 192.168.0.0/16
 set firewall group network-group PRIVATE_NETS network 172.16.0.0/12
 set firewall group network-group PRIVATE_NETS network 10.0.0.0/8
+set firewall group port-group destination_ports description ''
+set firewall group port-group destination_ports port 25
+set firewall group port-group destination_ports port 143
+set firewall group port-group destination_ports port 587
+set firewall group port-group destination_ports port 465
 set firewall ipv6-receive-redirects disable
 set firewall ipv6-src-route disable
 set firewall ip-src-route disable
@@ -37,13 +52,34 @@ set firewall modify balance rule 110 destination group address-group ADDRv4_eth9
 set firewall modify balance rule 110 modify table main
 set firewall modify balance rule 140 action modify
 set firewall modify balance rule 140 modify lb-group G
+set firewall name All_pass default-action accept
+set firewall name All_pass description ''
+set firewall name All_pass rule 1 action accept
+set firewall name All_pass rule 1 description clean_mails
+set firewall name All_pass rule 1 destination group address-group destination_hosts
+set firewall name All_pass rule 1 destination group port-group destination_ports
+set firewall name All_pass rule 1 log disable
+set firewall name All_pass rule 1 protocol all
+set firewall name All_pass rule 1 state established enable
+set firewall name All_pass rule 1 state invalid enable
+set firewall name All_pass rule 1 state new enable
+set firewall name All_pass rule 1 state related enable
+set firewall name All_pass rule 2 action drop
+set firewall name All_pass rule 2 description drop_spam
+set firewall name All_pass rule 2 destination group port-group destination_ports
+set firewall name All_pass rule 2 log enable
+set firewall name All_pass rule 2 protocol all
+set firewall name All_pass rule 2 state established enable
+set firewall name All_pass rule 2 state invalid enable
+set firewall name All_pass rule 2 state new enable
+set firewall name All_pass rule 2 state related enable
 set firewall receive-redirects disable
 set firewall send-redirects enable
 set firewall source-validation disable
 set firewall syn-cookies enable
+set interfaces ethernet eth0 description EdgeSwitch
 set interfaces ethernet eth0 duplex auto
 set interfaces ethernet eth0 speed auto
-set interfaces ethernet eth1 description EdgeSwitch
 set interfaces ethernet eth1 duplex auto
 set interfaces ethernet eth1 speed auto
 set interfaces ethernet eth2 description 'POE Switch'
@@ -73,6 +109,7 @@ set interfaces ethernet eth8 duplex auto
 set interfaces ethernet eth8 speed auto
 set interfaces ethernet eth9 address 192.168.100.2/24
 set interfaces ethernet eth9 description 'WAN 6'
+set interfaces ethernet eth9 disable
 set interfaces ethernet eth9 duplex auto
 set interfaces ethernet eth9 poe output off
 set interfaces ethernet eth9 speed auto
@@ -83,7 +120,7 @@ set interfaces ethernet eth11 speed auto
 set interfaces switch switch0 address 10.0.154.1/24
 set interfaces switch switch0 address 10.0.154.2/24
 set interfaces switch switch0 description Local
-set interfaces switch switch0 firewall in modify balance
+set interfaces switch switch0 firewall in name All_pass
 set interfaces switch switch0 mtu 1500
 set interfaces switch switch0 switch-port interface eth0
 set interfaces switch switch0 switch-port interface eth1
@@ -135,7 +172,7 @@ set service nat rule 5018 outbound-interface eth9
 set service nat rule 5018 type masquerade
 set service ssh port 22
 set service ssh protocol-version v2
-set service unms disable
+set service unms connection 'wss://10.0.154.3:9443+aBwmtL3lDqOPT065TuFz5BQjZ2_BLPAoVRnV-QkCr5gAAAAA+allowUntrustedCertificate'
 set system conntrack expect-table-size 4096
 set system conntrack hash-size 4096
 set system conntrack table-size 32768
